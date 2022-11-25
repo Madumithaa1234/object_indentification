@@ -1,6 +1,6 @@
 img = "";
 status = "";
-object = [];
+objects = [];
 
 function setup(){
     canvas = createCanvas(640, 420);
@@ -11,20 +11,6 @@ function setup(){
 
 function preload(){
     img = loadImage('dog_cat.jpg');
-}
-
-function draw(){
-    image(img, 0, 0, 640, 420);
-    fill("#07fa34");
-    text("dog", 98, 70);
-    noFill();
-    stroke("#07fa34");
-    rect(99, 40, 200, 200 );
-    fill("#07fa34");
-    text("cat", 320, 70);
-    noFill();
-    stroke("#07fa34");
-    rect(300, 40, 400, 300 );
 }
 
 function modelLoaded(){
@@ -38,4 +24,21 @@ function gotResult(error, results){
         console.log(error);
     }
     console.log(results);
+    objects = results;
 }
+
+function draw(){
+    image(img, 0, 0, 640, 420);
+    if(status != ""){
+       for(i=0; i< objects.length; i++){
+        document.getElementById("status").innerHTML = "status : objects detected";
+        fill("#07fa34");
+        percent = floor(objects[i].confidence*100);
+        text(objects[i].label + "" + percent + "%", objects[i].x + 15, objects[i].y + 15);
+        noFill();
+        stroke("#07fa34");
+        rect(objects[i].x, objects[i].y, objects[i].width, objects[i].height - 100 );
+       }
+    }
+}
+
